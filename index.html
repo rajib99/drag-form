@@ -27,15 +27,16 @@
     padding: 10px;
     box-sizing: border-box;
   }
-  .dropzone input{ width: 100%; }
+  .dropzone.dropped{ height: auto; }
+  .dropzone input, .dropzone textarea{ width: 100%; }
 
   </style>
 </head>
 <body>
   <div id="form-cnt" class="container">
     <div class="dragloc col">
-      <p id="text-input" class="text" draggable="true" ondragstart="event.dataTransfer.setData('text/plain',null)">Text Input Box </p>
-      <p class="textarea">TextArea</p>
+      <p data-input="text" data-type="text" draggable="true" ondragstart="event.dataTransfer.setData('text/plain',null)">Text Input Box </p>
+      <p data-input="textarea" draggable="true" ondragstart="event.dataTransfer.setData('text/plain',null)" class="textarea">TextArea</p>
       <p class="select">Select Box</p>
       <p class="chckbox">Check Box</p>
       <p class="file">File Uploader</p>
