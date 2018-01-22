@@ -1,7 +1,6 @@
 (function(){
 
 var dragged;
-var dm;
 
   /* events fired on the draggable target */
   document.addEventListener("drag", function( event ) {
@@ -10,8 +9,7 @@ var dm;
 
   document.addEventListener("dragstart", function( event ) {
       // store a ref. on the dragged elem
-      dm = event.target;
-      dm = event;
+      dragged = event.target;
       //console.log('dragstart',event );
       //console.log( 'dragstart',event.target );
       // make it half transparent
@@ -52,41 +50,58 @@ var dm;
       // prevent default action (open as link for some elements)
       e.preventDefault();
 
-
-  console.log('hell', dm.);
-
       var txtareaInput = document.createElement('textarea');
       txtareaInput.setAttribute('name', 'txtareainput[]');
 
       if ( e.target.className == "dropzone" ) {
           e.target.style.background = "";
 
-          // if(dragged.id == 'text-input'){
-          //   makeElement()
-          //   dropElement(e, txtInput);
-          // }
-          //
-          // if(dragged.id == 'textarea-input'){
-          //   dropElement( e, txtareaInput );
-          // }
+          makeElementDrop(dragged.dataset.input, dragged.dataset.type, e);
+          //dropElement(e, createdElement);
       }
 
   }, false);
 
 
-  function dropElement(ref, element){
-    ref.target.appendChild( element );
-    ref.target.classList.add('dropped');
+  function makeElementDrop(input, type, dropLocRef){
+    console.log(input, type, dropLocRef);
+    var inputField = document.createElement(input);
+    if( input == 'textarea' || input == 'select' ){
+      inputField.setAttribute('name', input+'input[]');
+    }else{
+      inputField.setAttribute('type', type);
+      inputField.setAttribute('name', input+'input[]');
+    }
+
+    dropLocRef.target.appendChild( inputField );
+    dropLocRef.target.classList.add('dropped');
+
+    addInputOptions(inputField)
+
   }
 
-  function makeElement(input, type){
-    var txtInput = document.createElement(input);
-    if(input == 'textarea'){
-      txtInput.setAttribute('name', input+'input[]');
-    }else{
-      txtInput.setAttribute('type', type);
-      txtInput.setAttribute('name', input+'input[]');
-    }
+  function addInputOptions(inputField){
+    optionCnt = document.querySelector('#inputOptions')
+    optionCnt.style.display = "block";
+    saveBtn = document.querySelector("#saveAttr");
+    var idAttr = document.querySelector("#attrId");
+    var classAttr = document.querySelector("#attrClass");
+    var placholderAttr = document.querySelector("#attrPlacholder");
+
+    //if save button clicks,then add attributes to element
+    saveBtn.addEventListener('click', function(){
+      inputField.setAttribute('id', idAttr.value);
+      inputField.setAttribute('class', classAttr.value);
+      inputField.setAttribute('placeholder', placholderAttr.value);
+      optionCnt.style.display = "none";
+      idAttr.value = ""; classAttr.value = ""; placholderAttr.value = "";
+
+    });
+
+    //if close button clicks
+    document.querySelector("#closeAttr").addEventListener('click', function(){
+      optionCnt.style.display = "none";
+    });
   }
 
 }());
